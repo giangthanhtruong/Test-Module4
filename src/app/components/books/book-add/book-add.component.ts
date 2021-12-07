@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {BookService} from "../../../service/book.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-book-add',
@@ -7,9 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BookAddComponent implements OnInit {
 
-  constructor() { }
+  formBookAdd?: FormGroup ;
+  constructor(private fb: FormBuilder,
+              private bookService: BookService,
+              private router: Router) { }
 
   ngOnInit(): void {
+    this.formBookAdd = this.fb.group({
+      title: [''],
+      author: [''],
+      description: ['']
+    })
+
   }
 
+  submit() {
+    let data = this.formBookAdd?.value;
+    console.log(data.id)
+    this.bookService.create(data).subscribe(res => {
+      this.router.navigate(['/book'])
+    })
+  }
 }
